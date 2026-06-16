@@ -1,7 +1,9 @@
-const app = require("./express/express.js")
+const app = require("./config/app.js")
 const connectDB = require("./config/database.js")
-
 const port = 3000;
+require('./routes/signup.js');
+require('./routes/login.js');
+require('./routes/seats.js');
 
 
 
