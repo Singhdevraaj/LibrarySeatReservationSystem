@@ -1,6 +1,6 @@
 const { z } = require('zod');
 
-function validateSignup(req, res, next){
+function validateSignupInput(req, res, next){
     const userSchema = z.object({
         name: z.string().min(2, "Username must be at least 3 characters").max(50),
         email: z.string().email("Invalid email format"),
@@ -24,6 +24,7 @@ function validateSignup(req, res, next){
     if(!result.success){
         return res.status(400).json({
             success:false,
+            "message":"hi from validateSignupInput",
             errors:result.error.flatten().fieldErrors
         });
     }
@@ -42,7 +43,7 @@ function validateSignup(req, res, next){
 
 
 
-function validateLogin(req, res, next){
+function validateLoginInputs(req, res, next){
     const userSchema = z.object({
         email: z.coerce.string().email("Invalid email format"),
         password: z.coerce.string()
@@ -64,6 +65,7 @@ function validateLogin(req, res, next){
     if(!result.success){
         return res.status(400).json({
             success:false,
+             "message":"hi from validateLoginInputs",
             errors:result.error.flatten().fieldErrors
         });
     }
@@ -79,7 +81,7 @@ function validateLogin(req, res, next){
 }
 
 
-function inputValidationSeat(req,res,next){
+function validateSeatInput(req,res,next){
     const seatSchema = z.object({
         seatNumber:z.coerce.number().min(1, "Enter the seat number 1 to 100").max(100),
         floor:z.coerce.number().min(1, "Enter the floor number 1 to 5").max(5)
@@ -91,6 +93,7 @@ function inputValidationSeat(req,res,next){
     if(!result.success){
         return res.status(400).json({
             "success":false,
+            "message":"hi from validateSeatInput",
             error:result.error.flatten().fieldErrors
         });
     }
@@ -101,4 +104,4 @@ function inputValidationSeat(req,res,next){
 
 }
 
-module.exports = {validateSignup,validateLogin,inputValidationSeat};
+module.exports = {validateSignupInput,validateLoginInputs,validateSeatInput};

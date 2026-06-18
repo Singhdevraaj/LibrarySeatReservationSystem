@@ -1,11 +1,11 @@
 const app = require("../config/app.js");
 
 const { Seat } = require('../models/seat.js')
-const {inputValidationSeat} = require('../middleware/validation.js')
+const {validateSeatInput} = require('../middleware/validation.js')
 
 console.log("Seat imported:", Seat);
 
-app.post('/seats',inputValidationSeat, async (req, res) => {
+app.post('/seats',validateSeatInput, async (req, res) => {
     const { seatNumber, floor, isReserved } = req.body;
     try {
         const seatexists = await Seat.findOne({ seatNumber, floor });

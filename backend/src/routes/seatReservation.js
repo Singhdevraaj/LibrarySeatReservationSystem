@@ -1,15 +1,16 @@
 const app = require("../config/app.js");
-const { validateUser } = require("../middleware/auth.js") // authentication 
-const { validateLogin } = require('../middleware/validation.js');//input validation 
+// const { authenticateUser } = require("../middleware/auth.js") // authentication 
+// const { validateLoginInputs } = require('../middleware/validation.js');//input validation 
 const Reservation = require("../models/resevation.js");
 const { Seat } = require("../models/seat.js");
 const mongoose = require('mongoose')
-const {inputValidationSeat} = require('../middleware/validation.js')
-const {isSeatExists,isSeatAvailable} =  require('../middleware/middleware.js')
+const {validateSeatInput} = require('../middleware/validation.js')
+const {findSeat,checkSeatAvailability} =  require('../middleware/middleware.js')
+const {authenticateUser}= require('../middleware/auth.js')
 
 
-app.post('/seatReservation', inputValidationSeat, isSeatExists, isSeatAvailable, async (req, res) => {
-    // i have attached the userDetails while authentication and seat Details while isSeatExists
+app.post('/seatReservation', authenticateUser,validateSeatInput, findSeat, checkSeatAvailability, async (req, res) => {
+    // i have attached the userDetails while authentication and seat Details while findSeat
     const user = req.user;
     const seat = req.seat;
 
@@ -50,9 +51,11 @@ app.post('/seatReservation', inputValidationSeat, isSeatExists, isSeatAvailable,
     } 
     catch (error) {
     await session.abortTransaction();
-
+console.log("User:", req.user);
+console.log("Seat:", req.seat);
     return res.status(400).json({
         success: false,
+       
         message: error.message
     });
 }

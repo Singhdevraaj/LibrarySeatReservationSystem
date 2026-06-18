@@ -1,8 +1,8 @@
 const app = require("../config/app.js");
 const User = require('../models/user.js')
-const {validateSignup} =require('../middleware/validation.js')
+const {validateSignupInput} =require('../middleware/validation.js')
 
-app.post('/signup',validateSignup,async (req,res)=>{
+app.post('/signup',validateSignupInput,async (req,res)=>{
     const {name,email,password,role} = req.body;
    try{
     const checkExists=await User.findOne({email});
