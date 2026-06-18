@@ -2,9 +2,10 @@ const User = require('../models/user.js')
 async function validateUser(req, res, next) {
     const { email, password } = req.body;
     try {
-        const userExists = await User.findOne({ email });
-        if (userExists) {
-            if (userExists.password === password) {
+        const user = await User.findOne({ email });
+        if (user) {
+            if (user.password === password) {
+                req.user =user;
                 return next();
             }
             else {

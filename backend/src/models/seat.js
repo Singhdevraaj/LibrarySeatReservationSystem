@@ -1,15 +1,14 @@
 const mongoose = require('mongoose');
-const seatScheme = new mongoose.Schema({
+const seatSchema = new mongoose.Schema({
   seatNumber: {
     type: Number,
-    unique: true,
     min:1,
     required:true
   },
   floor: {
     type: Number,
     min:1,
-    reqiured:true
+    required:true
   },
   isReserved: {
     type: Boolean,
@@ -18,5 +17,15 @@ const seatScheme = new mongoose.Schema({
   }
 },{timestamps:true})
 
-const Seat = mongoose.model("Seat", seatScheme);
+seatSchema.index(
+    {
+        floor: 1,
+        seatNumber: 1
+    },
+    {
+        unique: true
+    }
+);
+
+const Seat = mongoose.model("Seat", seatSchema);
 module.exports = {Seat};

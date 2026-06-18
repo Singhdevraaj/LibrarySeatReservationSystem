@@ -1,62 +1,52 @@
 
-// there middleware are the 
-// 1. Login
-// 2. signup
-// 3. reservation seat 
+const { Seat } = require("../models/seat.js");
+
 async function isSeatExists(req, res, next) {
-    const { seatNumber, floor, isReserved } = req.body;
+    const { seatNumber, floor } = req.body;
     try {
-        const seatexists = await Seat.findOne({ seatNumber });
-        if (seatexists) {
-            return res.status(409).json({
-                "success": false,
-                "message": "Seat Already exists"
-            })
-        }
-        else {
-            
+        const seat = await Seat.findOne({ seatNumber, floor });
+        if (seat) {
+            req.seat = seat;
             return next();
         }
+        else {
+            return res.status(404).json({
+                "success": false,
+                "message": "Seat does not exist"
+            })
+
+        }
     } catch (error) {
-        console.log("Error occurred while creating seat " + error)
-        return res.status(400).json({
+        console.error("Error occurred while creating seat " + error)
+        return res.status(500).json({
             "success": false,
-            "message": "Error occure while creating seat",
-            "Error": error
+            message: "Internal Server Error"
         })
     }
 }
 
 
 async function isSeatAvailable(req, res, next) {
-    const { seatNumber, floor, isReserved } = req.body;
+    const isReserved = req.seat.isReserved;
     try {
-        const seatexists = await Seat.findOne({ seatNumber });
-        if (!seatexists) {
+        if (!isReserved)
+            return next();
+
+        else {
             return res.status(409).json({
                 "success": false,
-                "message": "Seat Already exists"
+                "message": "Seat is Reserved"
             })
         }
-        else {
-            if(seatexists.isReserved===false){
-            return next();}
-            else{
-                return res.status(409).json({
-                "success": false,
-                "message": "Seat is unavailable"
-            })
-            }
-        }
-    } catch (error) {
-        console.log("Error occurred while creating seat " + error)
-        return res.status(400).json({
-            "success": false,
-            "message": "Error occure while creating seat",
-            "Error": error
-        })
-    }
+    }catch (error) {
+    console.error("Error occurred while creating seat " + error)
+    return res.status(500).json({
+        "success": false,
+        message: "Internal Server Error"
+
+    })
+}
 }
 
 
-module.exports = { isSeatExists,isSeatAvailable }
+module.exports = { isSeatExists, isSeatAvailable }

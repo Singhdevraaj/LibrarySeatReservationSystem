@@ -6,19 +6,15 @@ const reservationSchema = new mongoose.Schema({
     ref: "User",
     required: true
   },
-
   seatId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Seat",
     required: true
   },
-
   reservedAt: {
     type: Date,
     default: Date.now,
-    required: true
   },
-
   status: {
     type: String,
     enum: ["booked", "cancelled"],
