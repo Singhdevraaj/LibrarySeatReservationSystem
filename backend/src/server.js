@@ -4,7 +4,8 @@ const port = 3000;
 require('./routes/signup.js');
 require('./routes/login.js');
 require('./routes/seats.js');
-require('./routes/seatReservation.js')
+require('./routes/reserve-seat.js')
+require('./routes/getseats.js');
 
 
 

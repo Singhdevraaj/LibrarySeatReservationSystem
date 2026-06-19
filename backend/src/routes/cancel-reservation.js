@@ -1,0 +1,9 @@
+const app = require("../config/app.js");
+// const { authenticateUser } = require("../middleware/auth.js") // authentication 
+// const { validateLoginInputs } = require('../middleware/validation.js');//input validation 
+const Reservation = require("../models/resevation.js");
+const { Seat } = require("../models/seat.js");
+const mongoose = require('mongoose')
+const {validateSeatInput} = require('../middleware/validation.js')
+const {findSeat,checkSeatAvailability} =  require('../middleware/middleware.js')
+const {authenticateUser}= require('../middleware/auth.js')

@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 app.use(express.json());
 // require("../routes/login"); this create an circular dependency
-// require("../routes/seatReservation.js")
+// require("../routes/reserve-seat.js")
 // require("../middleware/middleware.js")
 
 

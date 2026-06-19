@@ -9,7 +9,7 @@ const {findSeat,checkSeatAvailability} =  require('../middleware/middleware.js')
 const {authenticateUser}= require('../middleware/auth.js')
 
 
-app.post('/seatReservation', authenticateUser,validateSeatInput, findSeat, checkSeatAvailability, async (req, res) => {
+app.post('/reserve-seat', authenticateUser,validateSeatInput, findSeat, checkSeatAvailability, async (req, res) => {
     // i have attached the userDetails while authentication and seat Details while findSeat
     const user = req.user;
     const seat = req.seat;
@@ -20,7 +20,7 @@ app.post('/seatReservation', authenticateUser,validateSeatInput, findSeat, check
         session.startTransaction();
         
        
-        const updateSeat = await Seat.findOneAndUpdate(
+        const reservedSeat = await Seat.findOneAndUpdate(
             {_id:seat._id,
                 isReserved: false
             },
@@ -29,7 +29,7 @@ app.post('/seatReservation', authenticateUser,validateSeatInput, findSeat, check
                 ,new:true
             }
         );
-        if(!updateSeat){
+        if(!reservedSeat){
             throw new Error ("Seat already reserved");
         }
 
