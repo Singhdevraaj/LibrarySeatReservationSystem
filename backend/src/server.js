@@ -6,6 +6,7 @@ require('./routes/login.js');
 require('./routes/seats.js');
 require('./routes/reserve-seat.js')
 require('./routes/getseats.js');
+require('./routes/cancel-reservation.js')
 
 
 

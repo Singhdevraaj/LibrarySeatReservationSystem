@@ -52,5 +52,29 @@ async function checkSeatAvailability(req, res, next) {
 }
 }
 
+async function checkNotSeatAvailability(req, res, next) {
+    const isReserved = req.seat.isReserved;
+    try {
+        if (isReserved)
+            return next();
 
-module.exports = { findSeat, checkSeatAvailability }
+        else {
+            return res.status(409).json({
+                "success": false,
+                 "message":"hi i am in checkSeatAvailability",
+                "message": "Seat is Reserved"
+            })
+        }
+    }catch (error) {
+    console.error("Error occurred while creating seat " + error)
+    return res.status(500).json({
+        "success": false,
+         "message":"hi i am in checkSeatAvailability",
+        message: "Internal Server Error"
+
+    })
+}
+}
+
+
+module.exports = { findSeat, checkSeatAvailability ,checkNotSeatAvailability}

@@ -1,6 +1,8 @@
 const User = require('../models/user.js')
 async function authenticateUser(req, res, next) {
     const { email, password } = req.body;
+    console.log("Email: ",email);
+    console.log("Password: ",password);
     try {
         const user = await User.findOne({ email });
         if (user) {
