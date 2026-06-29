@@ -1,25 +1,17 @@
 const app = require("../config/app.js");
 const User = require('../models/user.js')
-const {validateSignupInput} =require('../middleware/validation.js')
+const bcrypt = require('bcrypt')
+const { validateSignupInput } = require('../middleware/validation.js')
+const { responseJson } = require('../utils/responseJson.js');
+const { isUserExists } = require('../utils/isUserExists.js')
 
-app.post('/signup',validateSignupInput,async (req,res)=>{
-    const {name,email,password,role} = req.body;
-   try{
-    const checkExists=await User.findOne({email});
-    if(!checkExists){
-        await User.create({name,email,password,role});
-        return res.status(201).json({
-            "success":true,
-            "message":"User Account created successfully"
-        })
-    }else{
-        return res.status(409).json({
-            success:false,
-            "message":"User already exists"
-        });
+app.post('/signup', validateSignupInput, isUserExists, async (req, res) => {
+    const { name, email, password, role } = req.body;
+    try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const user = await User.create({ name, email, password: hashedPassword, role });
+        responseJson(res, 201, true, "User Account created successfully");
+    } catch (error) {
+        responseJson(res, 500, false, "Internal Server Error");
     }
-   }catch(error){
-    console.error("Error: "+error);
-    return res.status(500).send("Internal Server Error");
-   } 
 })

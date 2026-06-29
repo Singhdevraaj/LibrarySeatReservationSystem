@@ -3,11 +3,12 @@ const connectDB = require("./config/database.js")
 const port = 3000;
 require('./routes/signup.js');
 require('./routes/login.js');
-require('./routes/seats.js');
+require('./routes/create-seats.js');
 require('./routes/reserve-seat.js');
 require('./routes/getseats.js');
 require('./routes/cancel-reservation.js');
 require('./routes/my-reservations.js');
+require('./routes/reservation-history.js');
 
 
 

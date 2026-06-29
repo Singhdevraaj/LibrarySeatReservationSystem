@@ -1,6 +1,6 @@
 const { z } = require('zod');
 
-function validateSignupInput(req, res, next){
+function validateSignupInput(req, res, next) {
     const userSchema = z.object({
         name: z.string().min(2, "Username must be at least 3 characters").max(50),
         email: z.string().email("Invalid email format"),
@@ -15,35 +15,31 @@ function validateSignupInput(req, res, next){
             .regex(/[0-9]/, "Password must contain at least one number")
             // Enforce at least one special character
             .regex(/[^A-Za-z0-9]/, "Password must contain at least one special character"),
-            role:z.string().toLowerCase().default("student")
-        
+        role: z.string().toLowerCase().default("student")
+
     })
 
     const result = userSchema.safeParse(req.body);
 
-    if(!result.success){
+    if (!result.success) {
         return res.status(400).json({
-            success:false,
-            "message":"hi from validateSignupInput",
-            errors:result.error.flatten().fieldErrors
+            success: false,
+            "message": "hi from validateSignupInput",
+            errors: result.error.flatten().fieldErrors
         });
     }
 
     req.body = result.data;
 
     next();
-        // res.status(200).json({
-        // success: true,
-        // message: "Input validation passed!",
-        // user: req.body // Contains the guaranteed valid structure
-    // });
+
 }
 
 
 
 
 
-function validateLoginInputs(req, res, next){
+function validateLoginInputs(req, res, next) {
     const userSchema = z.object({
         email: z.coerce.string().email("Invalid email format"),
         password: z.coerce.string()
@@ -57,51 +53,47 @@ function validateLoginInputs(req, res, next){
             .regex(/[0-9]/, "Password must contain at least one number")
             // Enforce at least one special character
             .regex(/[^A-Za-z0-9]/, "Password must contain at least one special character"),
-        
+
     })
 
     const result = userSchema.safeParse(req.body);
 
-    if(!result.success){
+    if (!result.success) {
         return res.status(400).json({
-            success:false,
-             "message":"hi from validateLoginInputs",
-            errors:result.error.flatten().fieldErrors
+            success: false,
+            "message": "hi from validateLoginInputs",
+            errors: result.error.flatten().fieldErrors
         });
     }
 
     req.body = result.data;
 
     next();
-        // res.status(200).json({
-        // success: true,
-        // message: "Input validation passed!",
-        // user: req.body // Contains the guaranteed valid structure
-    // });
+
 }
 
 
-function validateSeatInput(req,res,next){
+function validateSeatInput(req, res, next) {
     const seatSchema = z.object({
-        seatNumber:z.coerce.number().min(1, "Enter the seat number 1 to 100").max(100),
-        floor:z.coerce.number().min(1, "Enter the floor number 1 to 5").max(5)
+        seatNumber: z.coerce.number().min(1, "Enter the seat number 1 to 100").max(100),
+        floor: z.coerce.number().min(1, "Enter the floor number 1 to 5").max(5)
 
     })
 
     const result = seatSchema.safeParse(req.body);
 
-    if(!result.success){
+    if (!result.success) {
         return res.status(400).json({
-            "success":false,
-            "message":"hi from validateSeatInput",
-            error:result.error.flatten().fieldErrors
+            "success": false,
+            "message": "hi from validateSeatInput",
+            error: result.error.flatten().fieldErrors
         });
     }
-    
+
     req.body = result.data;
 
     next();
 
 }
 
-module.exports = {validateSignupInput,validateLoginInputs,validateSeatInput};
+module.exports = { validateSignupInput, validateLoginInputs, validateSeatInput };

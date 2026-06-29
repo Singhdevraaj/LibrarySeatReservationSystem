@@ -1,13 +1,16 @@
-const app = require('../config/app.js');
-const Reservation = require('../models/resevation.js');
-const { userAuth } = require('../middleware/auth.js');
+const app = require("../config/app.js");
+const Reservation = require("../models/resevation.js");
+const { Seat } = require("../models/seat.js");
+const mongoose = require('mongoose')
+const { userAuth } = require('../middleware/auth.js')
+const { responseJson } = require('../utils/responseJson.js');
 
-
-app.get('/my-reservations', userAuth, async (req, res) => {
-  try {
+app.get('/reservation-history', userAuth, async (req, res) => {
+    console.log("Is the control reach to the cancel-reservation.js ")
+     try {
     const reservations = await Reservation.find({
       userId: req.user._id,
-      status: "booked"
+      status: "cancelled"
     }).populate("seatId", "seatNumber floor");
 
     const transformedReservations = reservations.map((reservation) => ({
@@ -33,4 +36,6 @@ app.get('/my-reservations', userAuth, async (req, res) => {
       error: error.message
     });
   }
-});
+
+
+})

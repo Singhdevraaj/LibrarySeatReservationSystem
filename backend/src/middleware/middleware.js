@@ -1,5 +1,5 @@
-
 const { Seat } = require("../models/seat.js");
+const { responseJson } = require("../utils/responseJson.js");
 
 async function findSeat(req, res, next) {
     const { seatNumber, floor } = req.body;
@@ -10,71 +10,42 @@ async function findSeat(req, res, next) {
             return next();
         }
         else {
-            return res.status(404).json({
-                "success": false,
-                "message":"hi i am in findSeat",
-                "message": "Seat does not exist"
-            })
-
+            responseJson(res, 404, false, "Seat does not exist");
         }
     } catch (error) {
-        console.error("Error occurred while creating seat " + error)
-        return res.status(500).json({
-            "success": false,
-            "message":"hi i am in findSeat",
-            message: "Internal Server Error"
-        })
+
+        responseJson(res, 500, false, "Internal Server Error")
     }
 }
 
 
-async function checkSeatAvailability(req, res, next) {
-    const isReserved = req.seat.isReserved;
+async function isSeatAvailable(req, res, next) {1
     try {
-        if (!isReserved)
+        if (!req.seat.isReserved)
             return next();
 
         else {
-            return res.status(409).json({
-                "success": false,
-                 "message":"hi i am in checkSeatAvailability",
-                "message": "Seat is Reserved"
-            })
+
+            responseJson(res, 409, false, "Seat is unavailable to Reserve helloji");
         }
-    }catch (error) {
-    console.error("Error occurred while creating seat " + error)
-    return res.status(500).json({
-        "success": false,
-         "message":"hi i am in checkSeatAvailability",
-        message: "Internal Server Error"
+    } catch (error) {
 
-    })
-}
+        responseJson(res, 500, false, "Internal Server Error");
+    }
 }
 
-async function checkNotSeatAvailability(req, res, next) {
-    const isReserved = req.seat.isReserved;
+async function isSeatReserved(req, res, next) {
     try {
-        if (isReserved)
+        if (req.seat.isReserved) {
             return next();
+        } else {
 
-        else {
-            return res.status(409).json({
-                "success": false,
-                 "message":"hi i am in checkSeatAvailability",
-                "message": "Seat is Reserved"
-            })
+            responseJson(res, 409, false, "Seat is unreserve");
         }
-    }catch (error) {
-    console.error("Error occurred while creating seat " + error)
-    return res.status(500).json({
-        "success": false,
-         "message":"hi i am in checkSeatAvailability",
-        message: "Internal Server Error"
+    } catch (error) {
 
-    })
-}
+        responseJson(res, 500, false, "Internal Server Error");
+    }
 }
 
-
-module.exports = { findSeat, checkSeatAvailability ,checkNotSeatAvailability}
+module.exports = { findSeat, isSeatAvailable, isSeatReserved }
